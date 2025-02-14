@@ -1,4 +1,5 @@
 package com.testing.myapp;
+
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -7,8 +8,9 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
-
-import java.util.Locale;
+import android.widget.ImageView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.AppWidgetTarget;
 
 public class FollowerCountWidget extends AppWidgetProvider {
     @Override
@@ -21,7 +23,7 @@ public class FollowerCountWidget extends AppWidgetProvider {
     private void updateWidget(Context context, AppWidgetManager appWidgetManager, int widgetId) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
-        // Get saved username and theme preference
+        // Get saved user preferences
         String username = context.getSharedPreferences("InstagramWidget", Context.MODE_PRIVATE)
                 .getString("username", "");
         boolean isDark = context.getSharedPreferences("InstagramWidget", Context.MODE_PRIVATE)
@@ -31,21 +33,45 @@ public class FollowerCountWidget extends AppWidgetProvider {
         views.setInt(R.id.widget_container, "setBackgroundResource",
                 isDark ? R.drawable.widget_background_dark : R.drawable.widget_background_light);
 
-        // Set text color based on theme
+        // Set text colors based on theme
         int textColor = isDark ? Color.WHITE : Color.BLACK;
+        int secondaryTextColor = isDark ? Color.parseColor("#CCCCCC") : Color.parseColor("#666666");
+
         views.setTextColor(R.id.follower_count, textColor);
         views.setTextColor(R.id.username_text, textColor);
+        views.setTextColor(R.id.display_name, secondaryTextColor);
+        views.setTextColor(R.id.followers_label, secondaryTextColor);
 
         if (!username.isEmpty()) {
-            views.setTextViewText(R.id.username_text, "@" + username);
-
-            // Update follower count
+            // Update profile information
             InstagramService service = new InstagramService();
-            service.getFollowerCount(username, new InstagramService.FollowerCallback() {
+            service.getUserProfile(username, new InstagramService.ProfileCallback() {
                 @Override
-                public void onSuccess(int count) {
-                    String formattedCount = formatFollowerCount(count);
-                    views.setTextViewText(R.id.follower_count, formattedCount);
+                public void onSuccess(InstagramService.UserProfile profile) {
+                    // Set username and display name
+                    views.setTextViewText(R.id.username_text, "@" + profile.username);
+                    views.setTextViewText(R.id.display_name, profile.displayName);
+
+                    // Set follower count directly (no formatting needed)
+                    views.setTextViewText(R.id.follower_count, profile.followerCount);
+
+                    // Set weekly change indicator
+                    if (profile.weeklyChange > 0) {
+                        views.setViewVisibility(R.id.weekly_change, View.VISIBLE);
+                        views.setTextViewText(R.id.weekly_change, "+" + profile.weeklyChange);
+                        views.setTextColor(R.id.weekly_change, Color.parseColor("#4CAF50")); // Green color
+                    } else {
+                        views.setViewVisibility(R.id.weekly_change, View.GONE);
+                    }
+
+                    // Load profile photo using Glide
+                    AppWidgetTarget appWidgetTarget = new AppWidgetTarget(context, R.id.profile_image, views, widgetId);
+                    Glide.with(context.getApplicationContext())
+                            .asBitmap()
+                            .load(profile.profilePhotoUrl)
+                            .circleCrop()
+                            .into(appWidgetTarget);
+
                     views.setViewVisibility(R.id.loading_indicator, View.GONE);
                     appWidgetManager.updateAppWidget(widgetId, views);
                 }
@@ -60,6 +86,8 @@ public class FollowerCountWidget extends AppWidgetProvider {
         } else {
             views.setTextViewText(R.id.username_text, "Not configured");
             views.setTextViewText(R.id.follower_count, "Tap to set up");
+            views.setViewVisibility(R.id.display_name, View.GONE);
+            views.setViewVisibility(R.id.weekly_change, View.GONE);
         }
 
         // Add click listener to open main activity
@@ -69,27 +97,5 @@ public class FollowerCountWidget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.widget_container, pendingIntent);
 
         appWidgetManager.updateAppWidget(widgetId, views);
-    }
-
-
-
-
-
-    private String formatFollowerCount(int count) {
-        if (count > 99999) {
-            System.out.println("mil");
-            System.out.println(count);
-
-            return String.format( "%.1fM", count / 1000000.0);// Less than 1K - show exact number
-        }
-        if (count > 999) {
-            System.out.println("thou");
-            return String.format( "%.1fK", count / 1000.0);  // 1K-9.9K - show with one decimal
-        }
-        else {
-              // 1M+ - show with one decimal
-            System.out.println("simple");
-            return String.valueOf(count);
-        }
     }
 }
