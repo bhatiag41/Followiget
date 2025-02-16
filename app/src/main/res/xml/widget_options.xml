@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <appwidget-options xmlns:android="http://schemas.android.com/apk/res/android">
+        <option android:key="targetCellWidth" android:value="2"/>
+        <option android:key="targetCellHeight" android:value="2"/>
+    </appwidget-options>
+</PreferenceScreen>
