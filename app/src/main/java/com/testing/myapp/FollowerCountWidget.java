@@ -8,7 +8,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
-import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.AppWidgetTarget;
 
@@ -40,7 +39,7 @@ public class FollowerCountWidget extends AppWidgetProvider {
         views.setTextColor(R.id.follower_count, textColor);
         views.setTextColor(R.id.username_text, textColor);
         views.setTextColor(R.id.display_name, secondaryTextColor);
-        views.setTextColor(R.id.followers_label, secondaryTextColor);
+        views.setTextColor(R.id.follower_tag, secondaryTextColor);
 
         if (!username.isEmpty()) {
             // Update profile information
@@ -55,14 +54,7 @@ public class FollowerCountWidget extends AppWidgetProvider {
                     // Set follower count directly (no formatting needed)
                     views.setTextViewText(R.id.follower_count, profile.followerCount);
 
-                    // Set weekly change indicator
-                    if (profile.weeklyChange > 0) {
-                        views.setViewVisibility(R.id.weekly_change, View.VISIBLE);
-                        views.setTextViewText(R.id.weekly_change, "+" + profile.weeklyChange);
-                        views.setTextColor(R.id.weekly_change, Color.parseColor("#4CAF50")); // Green color
-                    } else {
-                        views.setViewVisibility(R.id.weekly_change, View.GONE);
-                    }
+
 
                     // Load profile photo using Glide
                     AppWidgetTarget appWidgetTarget = new AppWidgetTarget(context, R.id.profile_image, views, widgetId);
@@ -87,7 +79,7 @@ public class FollowerCountWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.username_text, "Not configured");
             views.setTextViewText(R.id.follower_count, "Tap to set up");
             views.setViewVisibility(R.id.display_name, View.GONE);
-            views.setViewVisibility(R.id.weekly_change, View.GONE);
+
         }
 
         // Add click listener to open main activity
