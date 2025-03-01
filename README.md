@@ -10,6 +10,8 @@ FollowiGet is an Android app that adds a widget to your home screen, displaying 
 
 ## Screenshots
   ![WhatsApp Image 2025-02-15 at 14 26 26_15e9f72d](https://github.com/user-attachments/assets/3d797abd-205d-4ab8-a585-3b64207d42ce)
+## Support
+<a href="https://www.buymeacoffee.com/gauravbhatiaofficial" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 
 ## Installation
