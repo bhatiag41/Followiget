@@ -2,10 +2,12 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MyApplication" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/material_dynamic_primary95</item>
-        <item name="colorPrimaryVariant">@color/material_dynamic_primary10</item>
-        <item name="colorOnPrimary">?attr/colorOnPrimary</item>
-        <item name="colorSecondary">?attr/colorSecondary</item>
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="colorPrimary">@color/purple2</item>
+        <item name="colorOnPrimary">?attr/colorSurface</item>
+        <item name="colorSecondary">@color/material_dynamic_primary40</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="android:windowBackground">@color/cardview_dark_background</item>
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->

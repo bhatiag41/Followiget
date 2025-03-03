@@ -2,11 +2,14 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MyApplication" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
+
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">false</item>
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
-        <item name="colorPrimary">@color/material_dynamic_primary95</item>
-        <item name="colorPrimaryVariant">@color/material_dynamic_primary10</item>
-        <item name="colorOnPrimary">@color/material_dynamic_secondary20</item>
-        <item name="colorSecondary">@color/material_dynamic_primary40</item>
+        <item name="colorPrimary">@color/purple1</item>
+        <item name="colorOnPrimary">?attr/colorSurface</item>
+        <item name="colorSecondary">@color/material_dynamic_primary20</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="android:windowBackground">@color/cardview_dark_background</item>
     </style>
