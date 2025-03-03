@@ -18,7 +18,10 @@
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
             android:textSize="32sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            />
 
         <TextView
             android:id="@+id/follower_tag"
