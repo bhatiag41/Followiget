@@ -3,4 +3,9 @@
     <string name="appwidget_text">wiget</string>
     <string name="add_widget">Fwiget</string>
     <string name="app_widget_description">This app adds a widget of your follower count</string>
+    <string-array name="platforms_array">
+        <item>Instagram</item>
+        <item>YouTube</item>
+        <item>Spotify</item>
+    </string-array>
 </resources>

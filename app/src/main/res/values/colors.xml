@@ -6,4 +6,55 @@
     <color name="purple2">#6A00D5</color>
     <color name="lightbg">#EDEDED</color>
     <color name="light_blue_900">#FF01579B</color>
+
+    <!-- Widget Background Colors -->
+    <color name="widget_card_base">#0E0E0E</color>
+    <color name="widget_card_base_light">#F0F0F0</color>
+
+    <!-- Widget Gradient Colors — no white endpoint, stays rich -->
+    <color name="widget_gradient_ig_start">#8B2FC9</color>
+    <color name="widget_gradient_ig_center">#D81B60</color>
+    <color name="widget_gradient_ig_end">#1A140A14</color>
+    <color name="widget_gradient_yt_start">#CC0000</color>
+    <color name="widget_gradient_yt_mid">#E53935</color>
+    <color name="widget_gradient_yt_end">#FFFFFF</color>
+
+    <!-- Widget Minimal Theme Colors -->
+    <color name="widget_minimal_yt">#D32F2F</color>
+    <color name="widget_minimal_ig">#C2185B</color>
+    <color name="widget_minimal_bg_dark">#0E0E0E</color>
+    <color name="widget_minimal_bg_light">#F2F2F2</color>
+
+    <!-- Widget Text — dark mode (on dark bg) -->
+    <color name="widget_text_followers_tag">#BEFFFFFF</color>
+    <color name="widget_text_followers_tag_ribbons">#55FFFFFF</color>
+    <color name="widget_text_username">#BFD9EFFF</color>
+    <color name="widget_text_username_ribbons">#8AFFFFFF</color>
+    <color name="widget_text_primary">#FFFFFF</color>
+
+    <!-- Widget Text — light mode (on light bg) -->
+    <color name="widget_text_followers_tag_light">#99252525</color>
+    <color name="widget_text_username_light">#BF252525</color>
+    <color name="widget_text_primary_light">#252525</color>
+
+    <!-- Widget Ribbon Colors Youtube -->
+    <color name="widget_ribbon_yt_t0">#00D32F2F</color>
+    <color name="widget_ribbon_yt_t1">#BFF44336</color>
+    <color name="widget_ribbon_yt_t2">#72C61818</color>
+    <color name="widget_ribbon_yt_t3">#00B71C1C</color>
+    <color name="widget_ribbon_yt_t4">#8CF44336</color>
+    <color name="widget_ribbon_yt_t5">#8DE03131</color>
+    <color name="widget_ribbon_yt_t6">#A6F44336</color>
+    <color name="widget_ribbon_yt_t7">#33D32F2F</color>
+
+    <!-- Widget Ribbon Colors IG -->
+    <color name="widget_ribbon_ig_t0">#00833ab4</color>
+    <color name="widget_ribbon_ig_t1">#E9C13584</color>
+    <color name="widget_ribbon_ig_t2">#ADE1306C</color>
+    <color name="widget_ribbon_ig_t3">#00fd1d1d</color>
+    <color name="widget_ribbon_ig_t4">#F3E1306C</color>
+    <color name="widget_ribbon_ig_t5">#AD8A4CB9</color>
+    <color name="widget_ribbon_ig_t6">#DDC13584</color>
+    <color name="widget_ribbon_ig_t7">#A8E1306C</color>
+
 </resources>
