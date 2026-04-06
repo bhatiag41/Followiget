@@ -1,6 +1,14 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
+
+// Read secrets from .env — never hardcode keys in source
+val envProps = Properties()
+val envFile = rootProject.file(".env")
+if (envFile.exists()) envFile.inputStream().use { envProps.load(it) }
+fun env(key: String) = envProps.getProperty(key, "")
 
 android {
     namespace = "com.testing.myapp"
@@ -14,6 +22,11 @@ android {
         versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "YOUTUBE_API_KEY",          "\"${env("YOUTUBE_API_KEY")}\"")
+        buildConfigField("String", "YOUTUBE_API_KEY_FALLBACK",  "\"${env("YOUTUBE_API_KEY_FALLBACK")}\"")
+        buildConfigField("String", "SPOTIFY_CLIENT_ID",         "\"${env("SPOTIFY_CLIENT_ID")}\"")
+        buildConfigField("String", "SPOTIFY_CLIENT_SECRET",     "\"${env("SPOTIFY_CLIENT_SECRET")}\"")
     }
 
     buildTypes {
@@ -31,6 +44,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

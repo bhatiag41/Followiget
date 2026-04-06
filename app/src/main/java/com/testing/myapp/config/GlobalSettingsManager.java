@@ -1,6 +1,7 @@
 package com.testing.myapp.config;
 
 import android.content.Context;
+import com.testing.myapp.BuildConfig;
 import org.json.JSONObject;
 import java.io.File;
 import java.io.FileReader;
@@ -10,9 +11,10 @@ public class GlobalSettingsManager {
     private static final String SETTINGS_FILE_NAME = "global_settings.json";
 
     public static class GlobalSettings {
-        public String youtubeApiKey = "AIzaSyBnm5kz9TDbDXiyzwFaXeu157rbQOuIGLU";
-        public String spotifyClientId = "5059b29671c34ab69ba290b1f2ef309e";
-        public String spotifyClientSecret = "fe7168feb5fa4051a0744b8831702fdc";
+        // Defaults come from BuildConfig, which reads from .env at build time
+        public String youtubeApiKey    = BuildConfig.YOUTUBE_API_KEY;
+        public String spotifyClientId  = BuildConfig.SPOTIFY_CLIENT_ID;
+        public String spotifyClientSecret = BuildConfig.SPOTIFY_CLIENT_SECRET;
     }
 
     public static void saveSettings(Context context, GlobalSettings settings) {
@@ -49,15 +51,17 @@ public class GlobalSettingsManager {
             }
 
             JSONObject json = new JSONObject(sb.toString());
+
+            // Load saved value; fall back to BuildConfig key, then fallback key
             settings.youtubeApiKey = json.optString("youtubeApiKey", settings.youtubeApiKey);
-            if (settings.youtubeApiKey.isEmpty()) settings.youtubeApiKey = "AIzaSyCZVCh_qgH1Xe27mbZQep1sw9nwsSoRD6A";
-            
+            if (settings.youtubeApiKey.isEmpty()) settings.youtubeApiKey = BuildConfig.YOUTUBE_API_KEY_FALLBACK;
+
             settings.spotifyClientId = json.optString("spotifyClientId", settings.spotifyClientId);
-            if (settings.spotifyClientId.isEmpty()) settings.spotifyClientId = "5059b29671c34ab69ba290b1f2ef309e";
-            
+            if (settings.spotifyClientId.isEmpty()) settings.spotifyClientId = BuildConfig.SPOTIFY_CLIENT_ID;
+
             settings.spotifyClientSecret = json.optString("spotifyClientSecret", settings.spotifyClientSecret);
-            if (settings.spotifyClientSecret.isEmpty()) settings.spotifyClientSecret = "fe7168feb5fa4051a0744b8831702fdc";
-            
+            if (settings.spotifyClientSecret.isEmpty()) settings.spotifyClientSecret = BuildConfig.SPOTIFY_CLIENT_SECRET;
+
             return settings;
         } catch (Exception e) {
             e.printStackTrace();
