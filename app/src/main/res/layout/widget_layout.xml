@@ -78,38 +78,43 @@
 
                     <TextView
                         android:id="@+id/follower_count_1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:gravity="center_vertical|start"
                         android:textColor="#FFFFFF"
                         android:textSize="42sp"
                         android:textStyle="bold"
                         android:letterSpacing="-0.03"
-                        android:maxLines="1"
+                        android:lines="1"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="26sp"
+                        android:autoSizeMaxTextSize="42sp"
                         android:includeFontPadding="false" />
 
                     <TextView
                         android:id="@+id/follower_count_2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:gravity="center_vertical|start"
                         android:textColor="#FFFFFF"
                         android:textSize="42sp"
                         android:textStyle="bold"
                         android:letterSpacing="-0.03"
-                        android:maxLines="1"
+                        android:lines="1"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="26sp"
+                        android:autoSizeMaxTextSize="42sp"
                         android:includeFontPadding="false" />
                 </ViewFlipper>
 
                 <!-- Username: elegant italic, visible unless widget is too narrow -->
-                <TextView
-                    android:id="@+id/username_text"
+                <ImageView
+                    android:id="@+id/username_image"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#BFD9EFFF"
-                    android:textSize="11sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="italic"
-                    android:ellipsize="end"
-                    android:maxLines="1"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="4dp"
                     android:visibility="gone" />
 
             </LinearLayout>

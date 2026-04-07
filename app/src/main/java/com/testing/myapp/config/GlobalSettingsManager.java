@@ -15,6 +15,7 @@ public class GlobalSettingsManager {
         public String youtubeApiKey    = BuildConfig.YOUTUBE_API_KEY;
         public String spotifyClientId  = BuildConfig.SPOTIFY_CLIENT_ID;
         public String spotifyClientSecret = BuildConfig.SPOTIFY_CLIENT_SECRET;
+        public boolean isDarkMode = true; // Default to dark mode
     }
 
     public static void saveSettings(Context context, GlobalSettings settings) {
@@ -24,6 +25,7 @@ public class GlobalSettingsManager {
             json.put("youtubeApiKey", settings.youtubeApiKey);
             json.put("spotifyClientId", settings.spotifyClientId);
             json.put("spotifyClientSecret", settings.spotifyClientSecret);
+            json.put("isDarkMode", settings.isDarkMode);
 
             try (FileWriter writer = new FileWriter(settingsFile)) {
                 writer.write(json.toString());
@@ -61,6 +63,8 @@ public class GlobalSettingsManager {
 
             settings.spotifyClientSecret = json.optString("spotifyClientSecret", settings.spotifyClientSecret);
             if (settings.spotifyClientSecret.isEmpty()) settings.spotifyClientSecret = BuildConfig.SPOTIFY_CLIENT_SECRET;
+
+            settings.isDarkMode = json.optBoolean("isDarkMode", settings.isDarkMode);
 
             return settings;
         } catch (Exception e) {

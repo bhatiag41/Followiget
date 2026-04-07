@@ -3,41 +3,51 @@ package com.testing.myapp;
 import androidx.appcompat.app.AppCompatActivity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.cardview.widget.CardView;
-import androidx.appcompat.widget.SwitchCompat;
 import com.testing.myapp.config.WidgetConfigManager;
-import com.testing.myapp.config.GlobalSettingsManager;
+import com.testing.myapp.utils.WidgetCanvasRenderer;
 
 public class WidgetConfigureActivity extends AppCompatActivity {
 
     int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     
     EditText accountIdInput;
-    SwitchCompat themeSwitch;
     
-    TextView platformIg;
-    TextView platformYt;
-    TextView platformSpotify;
+    // Platform Selectors
+    View platformIgContainer;
+    View platformYtContainer;
+    View platformSpotifyContainer;
     
+    // The background containers where we apply the circular colors
+    View platformIgBg;
+    View platformYtBg;
+    View platformSpotifyBg;
+
+    TextView platformIgLabel;
+    TextView platformYtLabel;
+    TextView platformSpotifyLabel;
+    
+    // Style Selectors
+    CardView styleMinimalCard;
+    CardView styleLinesCard;
+    CardView styleGradientCard;
+
     TextView styleMinimal;
     TextView styleLines;
     TextView styleGradient;
-    
-    CardView inputIconCard;
-    ImageView inputIcon;
-    
-    View spotifyContainer;
-    EditText spotifyIdInput;
-    EditText spotifySecretInput;
 
     String selectedPlatform = "instagram";
     String selectedStyle = "minimal";
+    
+    ImageView spotifyWavyBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,36 +57,57 @@ public class WidgetConfigureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_widget_configure);
         
         accountIdInput = findViewById(R.id.account_id_input);
-        themeSwitch = findViewById(R.id.theme_switch);
         
-        platformIg = findViewById(R.id.platform_ig);
-        platformYt = findViewById(R.id.platform_yt);
-        platformSpotify = findViewById(R.id.platform_spotify);
+        platformIgContainer = findViewById(R.id.platform_ig_container);
+        platformYtContainer = findViewById(R.id.platform_yt_container);
+        platformSpotifyContainer = findViewById(R.id.platform_spotify_container);
         
+        platformIgBg = findViewById(R.id.platform_ig_bg);
+        platformYtBg = findViewById(R.id.platform_yt_bg);
+        platformSpotifyBg = findViewById(R.id.platform_spotify_bg);
+
+        platformIgLabel = findViewById(R.id.platform_ig_label);
+        platformYtLabel = findViewById(R.id.platform_yt_label);
+        platformSpotifyLabel = findViewById(R.id.platform_spotify_label);
+        
+        styleMinimalCard = findViewById(R.id.style_minimal_card);
+        styleLinesCard = findViewById(R.id.style_lines_card);
+        styleGradientCard = findViewById(R.id.style_gradient_card);
+
         styleMinimal = findViewById(R.id.style_minimal);
         styleLines = findViewById(R.id.style_lines);
         styleGradient = findViewById(R.id.style_gradient);
-        
-        inputIconCard = findViewById(R.id.input_icon_card);
-        inputIcon = findViewById(R.id.input_icon);
-        
-        spotifyContainer = findViewById(R.id.spotify_credentials_container);
-        spotifyIdInput = findViewById(R.id.spotify_client_id_input);
-        spotifySecretInput = findViewById(R.id.spotify_client_secret_input);
+
+        spotifyWavyBg = findViewById(R.id.spotify_wavy_bg);
+
+        // Generate the wavy banner bitmap once layout is measured
+        spotifyWavyBg.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                spotifyWavyBg.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int w = spotifyWavyBg.getWidth();
+                int h = spotifyWavyBg.getHeight();
+                if (w > 0 && h > 0) {
+                    Bitmap banner = WidgetCanvasRenderer.createSpotifyBannerBitmap(WidgetConfigureActivity.this, w, h);
+                    spotifyWavyBg.setImageBitmap(banner);
+                }
+            }
+        });
 
         findViewById(R.id.back_btn).setOnClickListener(v -> finish());
+        
+        // Add settings button mapping added per user feedback
+        findViewById(R.id.settings_button).setOnClickListener(v -> {
+            startActivity(new Intent(this, SettingsActivity.class));
+        });
 
-        GlobalSettingsManager.GlobalSettings settings = GlobalSettingsManager.loadSettings(this);
-        spotifyIdInput.setText(settings.spotifyClientId);
-        spotifySecretInput.setText(settings.spotifyClientSecret);
+        platformIgContainer.setOnClickListener(v -> selectPlatform("instagram"));
+        platformYtContainer.setOnClickListener(v -> selectPlatform("youtube"));
+        platformSpotifyContainer.setOnClickListener(v -> selectPlatform("spotify"));
 
-        platformIg.setOnClickListener(v -> selectPlatform("instagram"));
-        platformYt.setOnClickListener(v -> selectPlatform("youtube"));
-        platformSpotify.setOnClickListener(v -> selectPlatform("spotify"));
-
-        styleMinimal.setOnClickListener(v -> selectStyle("minimal"));
-        styleLines.setOnClickListener(v -> selectStyle("lines"));
-        styleGradient.setOnClickListener(v -> selectStyle("gradient"));
+        styleMinimalCard.setOnClickListener(v -> selectStyle("minimal"));
+        styleLinesCard.setOnClickListener(v -> selectStyle("lines"));
+        styleGradientCard.setOnClickListener(v -> selectStyle("gradient"));
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -93,7 +124,6 @@ public class WidgetConfigureActivity extends AppCompatActivity {
         WidgetConfigManager.WidgetConfig config = WidgetConfigManager.loadConfig(this, appWidgetId);
         if (config != null) {
             accountIdInput.setText(config.accountId);
-            themeSwitch.setChecked(config.isDarkTheme);
             selectPlatform(config.platform);
             selectStyle(config.themeStyle);
         } else {
@@ -135,16 +165,10 @@ public class WidgetConfigureActivity extends AppCompatActivity {
                     appWidgetId,
                     platformId,
                     inputId,
-                    themeSwitch.isChecked(),
+                    true, 
                     selectedStyle
             );
             WidgetConfigManager.saveConfig(this, newConfig);
-
-            if (platformId.equals("spotify")) {
-                settings.spotifyClientId = spotifyIdInput.getText().toString().trim();
-                settings.spotifyClientSecret = spotifySecretInput.getText().toString().trim();
-                GlobalSettingsManager.saveSettings(this, settings);
-            }
             
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             FollowerCountWidget.updateAppWidget(this, appWidgetManager, appWidgetId, appWidgetManager.getAppWidgetOptions(appWidgetId));
@@ -159,23 +183,23 @@ public class WidgetConfigureActivity extends AppCompatActivity {
     private void selectStyle(String style) {
         selectedStyle = style;
         
-        styleMinimal.setBackgroundResource(R.drawable.pill_option_inactive);
-        styleMinimal.setTextColor(Color.parseColor("#8A8A8A"));
+        // Reset all
+        styleMinimalCard.setCardBackgroundColor(Color.TRANSPARENT);
+        styleLinesCard.setCardBackgroundColor(Color.TRANSPARENT);
+        styleGradientCard.setCardBackgroundColor(Color.TRANSPARENT);
         
-        styleLines.setBackgroundResource(R.drawable.pill_option_inactive);
-        styleLines.setTextColor(Color.parseColor("#8A8A8A"));
-        
-        styleGradient.setBackgroundResource(R.drawable.pill_option_inactive);
-        styleGradient.setTextColor(Color.parseColor("#8A8A8A"));
+        styleMinimal.setTextColor(Color.parseColor("#888888"));
+        styleLines.setTextColor(Color.parseColor("#888888"));
+        styleGradient.setTextColor(Color.parseColor("#888888"));
         
         if (style.equals("gradient")) {
-            styleGradient.setBackgroundResource(R.drawable.pill_option_active);
+            styleGradientCard.setCardBackgroundColor(Color.parseColor("#333333"));
             styleGradient.setTextColor(Color.WHITE);
         } else if (style.equals("lines")) {
-            styleLines.setBackgroundResource(R.drawable.pill_option_active);
+            styleLinesCard.setCardBackgroundColor(Color.parseColor("#333333"));
             styleLines.setTextColor(Color.WHITE);
         } else {
-            styleMinimal.setBackgroundResource(R.drawable.pill_option_active);
+            styleMinimalCard.setCardBackgroundColor(Color.parseColor("#333333"));
             styleMinimal.setTextColor(Color.WHITE);
         }
     }
@@ -183,37 +207,39 @@ public class WidgetConfigureActivity extends AppCompatActivity {
     private void selectPlatform(String platform) {
         selectedPlatform = platform;
         
-        platformIg.setBackgroundResource(R.drawable.pill_option_inactive);
-        platformIg.setTextColor(Color.parseColor("#8A8A8A"));
+        // Reset all to unselected visual (#666666 grey via view background color)
+        platformIgBg.setBackgroundColor(Color.parseColor("#666666"));
+        platformYtBg.setBackgroundColor(Color.parseColor("#666666"));
+        platformSpotifyBg.setBackgroundColor(Color.parseColor("#666666"));
         
-        platformYt.setBackgroundResource(R.drawable.pill_option_inactive);
-        platformYt.setTextColor(Color.parseColor("#8A8A8A"));
-        
-        platformSpotify.setBackgroundResource(R.drawable.pill_option_inactive);
-        platformSpotify.setTextColor(Color.parseColor("#8A8A8A"));
-        
-        spotifyContainer.setVisibility(View.GONE);
+        platformIgLabel.setVisibility(View.INVISIBLE);
+        platformYtLabel.setVisibility(View.INVISIBLE);
+        platformSpotifyLabel.setVisibility(View.INVISIBLE);
         
         if (platform.equals("youtube")) {
-            platformYt.setBackgroundResource(R.drawable.pill_option_active);
-            platformYt.setTextColor(Color.WHITE);
-            inputIconCard.setCardBackgroundColor(Color.parseColor("#D2F75B"));
-            inputIcon.setImageResource(R.drawable.ic_youtube);
+            platformYtBg.setBackgroundColor(Color.parseColor("#FF0000")); // YouTube Red
+            platformYtLabel.setVisibility(View.VISIBLE);
+            
             accountIdInput.setHint("YouTube Handle");
         } else if (platform.equals("spotify")) {
-            platformSpotify.setBackgroundResource(R.drawable.pill_option_active);
-            platformSpotify.setTextColor(Color.WHITE);
-            inputIconCard.setCardBackgroundColor(Color.parseColor("#1ED760"));
-            inputIcon.setImageResource(R.drawable.ic_spotify);
+            platformSpotifyBg.setBackgroundColor(Color.parseColor("#1DB954")); // Spotify Green
+            platformSpotifyLabel.setVisibility(View.VISIBLE);
+
             accountIdInput.setHint("Spotify Artist URL/ID");
-            spotifyContainer.setVisibility(View.VISIBLE);
         } else {
             // instagram
-            platformIg.setBackgroundResource(R.drawable.pill_option_active);
-            platformIg.setTextColor(Color.WHITE);
-            inputIconCard.setCardBackgroundColor(Color.parseColor("#C8A2F9"));
-            inputIcon.setImageResource(R.drawable.ic_instagram);
+            platformIgBg.setBackgroundResource(R.drawable.ig_gradient_bg); // IG Gradient
+            platformIgLabel.setVisibility(View.VISIBLE);
+
             accountIdInput.setHint("Instagram Username");
         }
+
+        // Show / hide the wavy Spotify banner with a smooth fade
+        boolean isSpotify = "spotify".equals(platform);
+        spotifyWavyBg.animate().cancel();
+        spotifyWavyBg.animate()
+            .alpha(isSpotify ? 1f : 0f)
+            .setDuration(400)
+            .start();
     }
 }

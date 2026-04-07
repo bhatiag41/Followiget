@@ -20,10 +20,21 @@
     <color name="widget_gradient_yt_end">#FFFFFF</color>
 
     <!-- Widget Minimal Theme Colors -->
-    <color name="widget_minimal_yt">#D32F2F</color>
-    <color name="widget_minimal_ig">#C2185B</color>
+    <color name="widget_minimal_yt">#F12222</color>
+    <color name="widget_minimal_ig">#C20C54</color>
+    <color name="widget_minimal_sp">#1DB954</color>
     <color name="widget_minimal_bg_dark">#0E0E0E</color>
-    <color name="widget_minimal_bg_light">#F2F2F2</color>
+    <color name="widget_minimal_bg_light">#FFFFFF</color>
+
+    <!-- Spotify Gradient Colors -->
+    <color name="widget_gradient_sp_start">#1DB954</color>
+    <color name="widget_gradient_sp_center">#17a349</color>
+
+    <!-- Spotify Music Lines Colors -->
+    <color name="widget_sp_bar_t0">#070707</color>
+    <color name="widget_sp_bar_t1">#EB0FEB15</color>
+    <color name="widget_sp_bar_t2">#000000</color>
+    <color name="widget_sp_bar_t3">#020202</color>
 
     <!-- Widget Text — dark mode (on dark bg) -->
     <color name="widget_text_followers_tag">#BEFFFFFF</color>
@@ -56,5 +67,26 @@
     <color name="widget_ribbon_ig_t5">#AD8A4CB9</color>
     <color name="widget_ribbon_ig_t6">#DDC13584</color>
     <color name="widget_ribbon_ig_t7">#A8E1306C</color>
+
+    <!-- App Theme Colors (Light Mode) -->
+    <color name="app_background">#F5F5F5</color>
+    <color name="app_card_bg">#FFFFFF</color>
+    <color name="app_input_bg">#EAEAEA</color>
+    <color name="app_text_primary">#1A1A1A</color>
+    <color name="app_text_secondary">#666666</color>
+    <color name="app_text_hint">#999999</color>
+    <color name="app_divider">#E0E0E0</color>
+    <color name="app_cta_bg">#1A1A1A</color>
+    <color name="app_cta_text">#FFFFFF</color>
+    <color name="app_icon_tint">#1A1A1A</color>
+    <color name="app_progress_track">#E0E0E0</color>
+    <color name="app_progress_fill">#1A1A1A</color>
+    <!-- Spotify Configure Page Banner Ribbons — Change these to restyle the banner -->
+    <color name="spotify_banner_ribbon_1">#DD1DB954</color>  <!-- main Spotify green -->
+    <color name="spotify_banner_ribbon_2">#CC17A349</color>  <!-- darker green -->
+    <color name="spotify_banner_ribbon_3">#EE22D35E</color>  <!-- lighter green -->
+    <color name="spotify_banner_ribbon_4">#CC178F42</color>  <!-- deep green -->
+    <!-- Text drawn on top of the ribbons — set to app bg so it looks like cutout text -->
+    <color name="spotify_banner_text">#F5F5F5</color>
 
 </resources>

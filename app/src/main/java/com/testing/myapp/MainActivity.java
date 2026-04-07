@@ -16,6 +16,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.settings_button).setOnClickListener(v -> {
+            startActivity(new Intent(this, SettingsActivity.class));
+        });
+
         findViewById(R.id.add_widget_button).setOnClickListener(v -> {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
             ComponentName myProvider = new ComponentName(this, FollowerCountWidget.class);

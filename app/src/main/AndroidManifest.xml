@@ -44,6 +44,10 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".SettingsActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

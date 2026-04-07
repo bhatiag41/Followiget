@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.AppWidgetTarget;
 import com.testing.myapp.cache.CacheManager;
 import com.testing.myapp.config.WidgetConfigManager;
+import com.testing.myapp.config.GlobalSettingsManager;
 import com.testing.myapp.platform.PlatformFactory;
 import com.testing.myapp.platform.SocialPlatform;
 import com.testing.myapp.utils.WidgetCanvasRenderer;
@@ -62,7 +63,7 @@ public class FollowerCountWidget extends AppWidgetProvider {
         boolean isYouTube = "youtube".equals(config.platform);
         boolean isRibbons = "lines".equals(config.themeStyle);
         boolean isMinimal = "minimal".equals(config.themeStyle);
-        boolean isDark    = config.isDarkTheme;
+        boolean isDark    = GlobalSettingsManager.loadSettings(context).isDarkMode;
 
         if (isMinimal) {
             // --- MINIMAL ---
@@ -72,13 +73,20 @@ public class FollowerCountWidget extends AppWidgetProvider {
 
             if (isYouTube) {
                 views.setInt(R.id.photo_container, "setBackgroundResource", R.drawable.photo_ring_minimal_youtube);
+            } else if ("spotify".equals(config.platform)) {
+                views.setInt(R.id.photo_container, "setBackgroundResource", R.drawable.photo_ring_minimal_spotify);
             } else {
                 views.setInt(R.id.photo_container, "setBackgroundResource", R.drawable.photo_ring_minimal_instagram);
             }
 
-            int themeColor = isYouTube
-                ? context.getResources().getColor(R.color.widget_minimal_yt)
-                : context.getResources().getColor(R.color.widget_minimal_ig);
+            int themeColor;
+            if (isYouTube) {
+                themeColor = context.getResources().getColor(R.color.widget_minimal_yt);
+            } else if ("spotify".equals(config.platform)) {
+                themeColor = context.getResources().getColor(R.color.widget_minimal_sp);
+            } else {
+                themeColor = context.getResources().getColor(R.color.widget_minimal_ig);
+            }
 
             int countColor = isDark
                 ? context.getResources().getColor(R.color.widget_text_primary)
@@ -90,20 +98,31 @@ public class FollowerCountWidget extends AppWidgetProvider {
             views.setTextColor(R.id.follower_tag, tagColor);
             views.setTextColor(R.id.follower_count_1, countColor);
             views.setTextColor(R.id.follower_count_2, countColor);
-            views.setTextColor(R.id.username_text, themeColor);
 
         } else if (isRibbons) {
             // --- LINES / RIBBONS ---
-            Bitmap bg = WidgetCanvasRenderer.createRibbonWavesBackground(context, bgWidth, bgHeight, config.platform);
+            // Spotify gets its own music-vibe EQ background; others get ribbon waves
+            boolean isSpotify = "spotify".equals(config.platform);
+            Bitmap bg;
+            if (isSpotify) {
+                bg = WidgetCanvasRenderer.createSpotifyMusicBackground(context, bgWidth, bgHeight);
+            } else {
+                bg = WidgetCanvasRenderer.createRibbonWavesBackground(context, bgWidth, bgHeight, config.platform);
+            }
             views.setImageViewBitmap(R.id.widget_background_image, bg);
             views.setViewVisibility(R.id.scrim_overlay, View.GONE);
-            views.setInt(R.id.photo_container, "setBackgroundResource", R.drawable.photo_ring_gradient);
+            views.setInt(R.id.photo_container, "setBackgroundResource", R.drawable.photo_ring_minimal_spotify);
 
-            // Ribbons always have dark card bg → white text
-            views.setTextColor(R.id.follower_tag,     context.getResources().getColor(R.color.widget_text_followers_tag_ribbons));
+            // Spotify lines uses green accent for tag; others use standard dim white
+            int tagColor = isSpotify
+                ? context.getResources().getColor(R.color.widget_minimal_sp)
+                : context.getResources().getColor(R.color.widget_text_followers_tag_ribbons);
+            views.setTextColor(R.id.follower_tag,     tagColor);
             views.setTextColor(R.id.follower_count_1, context.getResources().getColor(R.color.widget_text_primary));
             views.setTextColor(R.id.follower_count_2, context.getResources().getColor(R.color.widget_text_primary));
-            views.setTextColor(R.id.username_text,    context.getResources().getColor(R.color.widget_text_username_ribbons));
+            if (!isSpotify) {
+                views.setInt(R.id.photo_container, "setBackgroundResource", R.drawable.photo_ring_gradient);
+            }
 
         } else {
             // --- GRADIENT ---
@@ -121,17 +140,15 @@ public class FollowerCountWidget extends AppWidgetProvider {
             int tagColor = isDark
                 ? context.getResources().getColor(R.color.widget_text_followers_tag)
                 : context.getResources().getColor(R.color.widget_text_followers_tag_light);
-            int usernameColor = isDark
-                ? context.getResources().getColor(R.color.widget_text_username)
-                : context.getResources().getColor(R.color.widget_text_username_light);
 
             views.setTextColor(R.id.follower_tag,     tagColor);
             views.setTextColor(R.id.follower_count_1, countColor);
             views.setTextColor(R.id.follower_count_2, countColor);
-            views.setTextColor(R.id.username_text,    usernameColor);
         }
 
-        views.setTextViewText(R.id.follower_tag, isYouTube ? "subscribers" : "followers");
+        boolean isSpotify = "spotify".equals(config.platform);
+        String labelText = isYouTube ? "subscribers" : (isSpotify ? "monthly listeners" : "followers");
+        views.setTextViewText(R.id.follower_tag, labelText);
 
         Intent configIntent = new Intent(context, WidgetConfigureActivity.class);
         configIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -209,8 +226,25 @@ public class FollowerCountWidget extends AppWidgetProvider {
         
         String prefix = "";
         if ("instagram".equals(platformName)) prefix = "@";
+        String finalUsername = prefix + result.accountId;
 
-        views.setTextViewText(R.id.username_text, prefix + result.accountId);
+        WidgetConfigManager.WidgetConfig config = WidgetConfigManager.loadConfig(context, appWidgetId);
+        int usernameColor = android.graphics.Color.WHITE;
+        if (config != null) {
+            boolean isDark = GlobalSettingsManager.loadSettings(context).isDarkMode;
+            if ("minimal".equals(config.themeStyle)) {
+                 usernameColor = "youtube".equals(config.platform) 
+                           ? context.getResources().getColor(R.color.widget_minimal_yt)
+                           : context.getResources().getColor(R.color.widget_minimal_ig);
+            } else if ("lines".equals(config.themeStyle)) {
+                 usernameColor = context.getResources().getColor(R.color.widget_text_username_ribbons);
+            } else {
+                 usernameColor = isDark ? context.getResources().getColor(R.color.widget_text_username)
+                                        : context.getResources().getColor(R.color.widget_text_username_light);
+            }
+        }
+        views.setImageViewBitmap(R.id.username_image, WidgetCanvasRenderer.createTextBitmap(context, finalUsername, usernameColor, 18f));
+        views.setViewVisibility(R.id.username_image, View.VISIBLE);
 
         String countText = result.count;
         views.setTextViewText(R.id.follower_count_1, countText);
