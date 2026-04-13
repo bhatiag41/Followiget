@@ -1,11 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="90dp"
-    android:minHeight="70dp"
-    android:maxResizeHeight="70dp"
-    android:targetCellWidth="2"
-    android:targetCellHeight="1"
+    android:minWidth="160dp"
+    android:minHeight="60dp"
+    android:maxResizeHeight="160dp"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/widget_layout"
     android:resizeMode="horizontal|vertical"
-    android:widgetCategory="home_screen"/>
-
+    android:widgetCategory="home_screen"
+    android:configure="com.testing.myapp.WidgetConfigureActivity"/>

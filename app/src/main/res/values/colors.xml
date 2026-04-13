@@ -6,4 +6,96 @@
     <color name="purple2">#6A00D5</color>
     <color name="lightbg">#EDEDED</color>
     <color name="light_blue_900">#FF01579B</color>
+
+    <!-- Widget Background Colors -->
+    <color name="widget_card_base">#0E0E0E</color>
+    <color name="widget_card_base_light">#F0F0F0</color>
+
+    <!-- Widget Gradient Colors — no white endpoint, stays rich -->
+    <color name="widget_gradient_ig_start">#8B2FC9</color>
+    <color name="widget_gradient_ig_center">#D81B60</color>
+    <color name="widget_gradient_ig_end">#1A140A14</color>
+    <color name="widget_gradient_yt_start">#CC0000</color>
+    <color name="widget_gradient_yt_mid">#E53935</color>
+    <color name="widget_gradient_yt_end">#FFFFFF</color>
+
+    <!-- Widget Minimal Theme Colors -->
+    <color name="widget_minimal_yt">#F12222</color>
+    <color name="widget_minimal_ig">#C20C54</color>
+    <color name="widget_minimal_sp">#1DB954</color>
+    <color name="widget_minimal_bg_dark">#0E0E0E</color>
+    <color name="widget_minimal_bg_light">#FFFFFF</color>
+
+    <!-- Spotify Gradient Colors -->
+    <color name="widget_gradient_sp_start">#1DB954</color>
+    <color name="widget_gradient_sp_center">#17a349</color>
+
+    <!-- Spotify Music Lines Colors -->
+    <color name="widget_sp_bar_t0">#070707</color>
+    <color name="widget_sp_bar_t1">#EB0FEB15</color>
+    <color name="widget_sp_bar_t2">#000000</color>
+    <color name="widget_sp_bar_t3">#020202</color>
+
+    <!-- Widget Text — dark mode (on dark bg) -->
+    <color name="widget_text_followers_tag">#BEFFFFFF</color>
+    <color name="widget_text_followers_tag_ribbons">#55FFFFFF</color>
+    <color name="widget_text_username">#BFD9EFFF</color>
+    <color name="widget_text_username_ribbons">#8AFFFFFF</color>
+    <color name="widget_text_primary">#FFFFFF</color>
+
+    <!-- Widget Text — light mode (on light bg) -->
+    <color name="widget_text_followers_tag_light">#99252525</color>
+    <color name="widget_text_username_light">#BF252525</color>
+    <color name="widget_text_primary_light">#252525</color>
+
+    <!-- Widget Lines/Ribbons — light mode text (dark text on light card bg) -->
+    <color name="widget_text_followers_tag_ribbons_light">#BB1A1A1A</color>
+    <color name="widget_text_username_ribbons_light">#CC1A1A1A</color>
+    <color name="widget_text_primary_ribbons_light">#1A1A1A</color>
+
+    <!-- Spotify Lines widget — light mode bg & wave colors -->
+    <color name="widget_sp_lines_bg_light">#E8F8EF</color>     <!-- pale mint -->
+    <color name="widget_sp_lines_wave_light">#1DB954</color> <!-- semi-opaque Spotify green waves -->
+
+    <!-- Widget Ribbon Colors Youtube -->
+    <color name="widget_ribbon_yt_t0">#00FF0000</color>  <!-- fully transparent -->
+    <color name="widget_ribbon_yt_t1">#BFFF0000</color>  <!-- 75% YouTube red -->
+    <color name="widget_ribbon_yt_t2">#72CC0000</color>  <!-- 45% deep red -->
+    <color name="widget_ribbon_yt_t3">#00990000</color>  <!-- fully transparent deep -->
+    <color name="widget_ribbon_yt_t4">#8CFF0000</color>  <!-- 55% YouTube red -->
+    <color name="widget_ribbon_yt_t5">#8DEE0000</color>  <!-- 55% slightly deeper -->
+    <color name="widget_ribbon_yt_t6">#A6FF0000</color>  <!-- 65% YouTube red -->
+    <color name="widget_ribbon_yt_t7">#33FF0000</color>  <!-- 20% YouTube red -->
+
+    <!-- Widget Ribbon Colors IG -->
+    <color name="widget_ribbon_ig_t0">#00833ab4</color>
+    <color name="widget_ribbon_ig_t1">#E9C13584</color>
+    <color name="widget_ribbon_ig_t2">#ADE1306C</color>
+    <color name="widget_ribbon_ig_t3">#00fd1d1d</color>
+    <color name="widget_ribbon_ig_t4">#F3E1306C</color>
+    <color name="widget_ribbon_ig_t5">#AD8A4CB9</color>
+    <color name="widget_ribbon_ig_t6">#DDC13584</color>
+    <color name="widget_ribbon_ig_t7">#A8E1306C</color>
+
+    <!-- App Theme Colors (Light Mode) -->
+    <color name="app_background">#F5F5F5</color>
+    <color name="app_card_bg">#FFFFFF</color>
+    <color name="app_input_bg">#EAEAEA</color>
+    <color name="app_text_primary">#1A1A1A</color>
+    <color name="app_text_secondary">#666666</color>
+    <color name="app_text_hint">#999999</color>
+    <color name="app_divider">#E0E0E0</color>
+    <color name="app_cta_bg">#1A1A1A</color>
+    <color name="app_cta_text">#FFFFFF</color>
+    <color name="app_icon_tint">#1A1A1A</color>
+    <color name="app_progress_track">#E0E0E0</color>
+    <color name="app_progress_fill">#1A1A1A</color>
+    <!-- Spotify Configure Page Banner Ribbons — Change these to restyle the banner -->
+    <color name="spotify_banner_ribbon_1">#DD1DB954</color>  <!-- main Spotify green -->
+    <color name="spotify_banner_ribbon_2">#CC17A349</color>  <!-- darker green -->
+    <color name="spotify_banner_ribbon_3">#EE22D35E</color>  <!-- lighter green -->
+    <color name="spotify_banner_ribbon_4">#CC178F42</color>  <!-- deep green -->
+    <!-- Text drawn on top of the ribbons — set to app bg so it looks like cutout text -->
+    <color name="spotify_banner_text">#F8F5F5F5</color>
+
 </resources>

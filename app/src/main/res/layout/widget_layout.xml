@@ -1,92 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Root is a transparent match_parent host — the full allocated launcher cell.
+  Padding creates the iOS-style breathing room around the card,
+  so the card scales naturally with widget size (shrinks in 2x1, grows in 4x2)
+  while always looking like a distinct floating card, not a stretched fill.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
-    android:background="@drawable/widget_background_dark">
+      android:padding="0dp"
+   
+   
+    android:background="@android:color/transparent">
 
-    <LinearLayout
-        android:layout_width="379dp"
+    <!-- Card: fills the padded space → scales with widget size -->
+    <FrameLayout
+        android:id="@+id/widget_card"
+        android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:gravity="start"
-        android:orientation="vertical">
+        
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/widget_card_bg"
+        android:clipToOutline="true">
 
-        <TextView
-            android:id="@+id/follower_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:autoSizeTextType="uniform"
-            />
+        <!-- Background bitmap (gradient or canvas-drawn) fills card exactly -->
+        <ImageView
+            android:id="@+id/widget_background_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/follower_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="followers"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp" />
+        <!-- Scrim for day-mode contrast on gradient -->
+        <FrameLayout
+            android:id="@+id/scrim_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#22000000"
+            android:visibility="gone" />
 
+        <!-- Content row: text left, photo right -->
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="bottom"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="18dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
-            <ImageView
-                android:id="@+id/profile_image"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:layout_marginBottom="4dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="profile image" />
-
+            <!-- Text column: Fills the card height to allow content to scale -->
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:gravity="bottom"
+                android:id="@+id/text_container"
+                android:layout_width="0dp"
+                android:paddingTop="10dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/username_text"
+                    android:id="@+id/follower_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start|top"
-                    android:layout_marginStart="4dp"
-                    android:ellipsize="none"
-                    android:maxLines="1"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
+                    android:textColor="#99FFFFFF"
+                    android:textSize="9sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.18"
+                     />
 
-                <TextView
-                    android:id="@+id/display_name"
+                <ViewFlipper
+                    android:id="@+id/follower_count_flipper"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:inAnimation="@android:anim/fade_in"
+                    android:outAnimation="@android:anim/fade_out">
+
+                    <TextView
+                        android:id="@+id/follower_count_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:textColor="#FFFFFF"
+                        android:textSize="42sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="-0.03"
+                        android:lines="1"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="24sp"
+                        android:autoSizeMaxTextSize="42sp"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:id="@+id/follower_count_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical|start"
+                        android:textColor="#FFFFFF"
+                        android:textSize="42sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="-0.03"
+                        android:lines="1"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="24sp"
+                        android:autoSizeMaxTextSize="42sp"
+                        android:includeFontPadding="false" 
+                        />
+                </ViewFlipper>
+
+                <!-- Username: elegant italic, visible unless widget is too narrow -->
+                <ImageView
+                    android:id="@+id/username_image"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginTop="1dp"
-                    android:textAlignment="viewStart"
-                    android:textColor="#AAAAAA"
-                    android:layout_marginLeft="5dp"
-                    android:textSize="12sp" />
+                    android:layout_height="24dp"
+                    android:scaleType="fitStart"
+                    android:adjustViewBounds="true"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
+            <!-- Profile photo: always visible, 50×50dp -->
+            <FrameLayout
+                android:id="@+id/photo_container"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/photo_ring_gradient">
+
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="3dp" />
+            </FrameLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/loading_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone" />
 
-    <ProgressBar
-        android:id="@+id/loading_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+    </FrameLayout>
 
-</RelativeLayout>
+</FrameLayout>
