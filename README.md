@@ -4,7 +4,6 @@
 
 ![FollowiGet Preview](https://github.com/user-attachments/assets/e0acbd8f-8a16-4eca-be28-c8d0c952cb2d)
 
-)
 
 ## ✨ What's New in v2.0
 
