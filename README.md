@@ -2,18 +2,18 @@
 
 **FollowiGet** is a premium Android widget for tracking your social media presence in real-time. Now with multi-platform support, you can monitor your Instagram followers, YouTube subscribers, and Spotify monthly listeners with stunning, customizable aesthetics.
 
-![FollowiGet Preview](https://github.com/user-attachments/assets/3d797abd-205d-4ab8-a585-3b64207d42ce)
+![FollowiGet Preview](https://github.com/user-attachments/assets/e0acbd8f-8a16-4eca-be28-c8d0c952cb2d)
+
+)
 
 ## ✨ What's New in v2.0
 
 *   🌍 **Multi-Platform Integration**: Added support for **YouTube** and **Spotify** alongside Instagram.
-*   🎵 **Spotify Topographic Design**: A unique music-themed background with parallel wavy lines/EQ bars for Spotify Artist widgets.
 *   🎨 **Premium Aesthetic Modes**:
     *   **Minimal**: Sleek, outline-based designs for a clean home screen.
-    *   **Lines (Ribbons)**: Dynamic wavy ribbons or Spotify's EQ-style visualizations.
+    *   **Lines**: Dynamic wavy ribbons or Spotify's EQ-style visualizations.
     *   **Gradient**: Vibrant color blends that adapt to dark and light modes.
 *   🔗 **Direct Deep Links**: Tap the profile image to open the native app directly to the creator's page.
-*   💎 **Glassmorphism UI**: High-end translucent design language for a modern look.
 *   ⚡ **Optimized Performance**: Completely refactored storage using a split-key pattern for lightning-fast updates and reliability.
 
 ## 🛠️ Configuration Notes
@@ -36,17 +36,11 @@ When adding a YouTube channel, please use the handle format starting with an **`
 
 ## ⚙️ How It Works
 
-1.  **Enter Handle**: Provide your social media username or channel handle.
+1.  **Enter Handle**: Provide your social media us![Screenshot_20260413_234802_One UI Home](https://github.com/user-attachments/assets/e19b5905-7c51-418d-927f-2e6dffed98c6)
+ername or channel handle.
 2.  **Select Platform**: Choose between Instagram, YouTube, or Spotify.
 3.  **Customize Style**: Pick from Minimal, Lines, or Gradient themes.
 4.  **Resizability**: The widget is fully responsive; drag handles to find your perfect size.
-
-## 💻 Tech Stack
-
-*   **Language**: Java / Android SDK
-*   **Modern UI**: XML Layouts with custom Canvas drawing.
-*   **Data Handling**: REST APIs (Instagram, YouTube, Spotify).
-*   **Minimum Android Version**: 7.0 (Nougat)
 
 ## 🤝 Contributing
 
