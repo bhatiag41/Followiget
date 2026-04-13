@@ -35,8 +35,7 @@ When adding a YouTube channel, please use the handle format starting with an **`
 
 ## ⚙️ How It Works
 
-1.  **Enter Handle**: Provide your social media us![Screenshot_20260413_234802_One UI Home](https://github.com/user-attachments/assets/e19b5905-7c51-418d-927f-2e6dffed98c6)
-ername or channel handle.
+1.  **Enter Handle**: Provide your social media username or channel handle.
 2.  **Select Platform**: Choose between Instagram, YouTube, or Spotify.
 3.  **Customize Style**: Pick from Minimal, Lines, or Gradient themes.
 4.  **Resizability**: The widget is fully responsive; drag handles to find your perfect size.
