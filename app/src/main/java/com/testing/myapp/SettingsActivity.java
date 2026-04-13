@@ -64,16 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
             Toast.makeText(this, "Spotify credentials saved", Toast.LENGTH_SHORT).show();
         });
 
-        findViewById(R.id.contact_row).setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:"));
-            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"feedback@example.com"});
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback for Follower Widgets");
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, "No email app found", Toast.LENGTH_SHORT).show();
-            }
+        findViewById(R.id.contact_row).setOnClickListener(v -> {    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/bhatiag41"));
+            startActivity(intent);
         });
-    }
-}
+}}
