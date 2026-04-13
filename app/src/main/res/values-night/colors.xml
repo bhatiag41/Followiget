@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Theme Colors (Dark Mode) -->
+    <color name="app_background">#0D0D0D</color>
+    <color name="app_card_bg">#1A1A1A</color>
+    <color name="app_input_bg">#262626</color>
+    <color name="app_text_primary">#FFFFFF</color>
+    <color name="app_text_secondary">#888888</color>
+    <color name="app_text_hint">#555555</color>
+    <color name="app_divider">#2A2A2A</color>
+    <color name="app_cta_bg">#FFFFFF</color>
+    <color name="app_cta_text">#000000</color>
+    <color name="app_icon_tint">#FFFFFF</color>
+    <color name="app_progress_track">#333333</color>
+    <color name="app_progress_fill">#C06080</color>
+</resources>

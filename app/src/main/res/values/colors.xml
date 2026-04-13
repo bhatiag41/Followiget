@@ -48,15 +48,24 @@
     <color name="widget_text_username_light">#BF252525</color>
     <color name="widget_text_primary_light">#252525</color>
 
+    <!-- Widget Lines/Ribbons — light mode text (dark text on light card bg) -->
+    <color name="widget_text_followers_tag_ribbons_light">#BB1A1A1A</color>
+    <color name="widget_text_username_ribbons_light">#CC1A1A1A</color>
+    <color name="widget_text_primary_ribbons_light">#1A1A1A</color>
+
+    <!-- Spotify Lines widget — light mode bg & wave colors -->
+    <color name="widget_sp_lines_bg_light">#E8F8EF</color>     <!-- pale mint -->
+    <color name="widget_sp_lines_wave_light">#1DB954</color> <!-- semi-opaque Spotify green waves -->
+
     <!-- Widget Ribbon Colors Youtube -->
-    <color name="widget_ribbon_yt_t0">#00D32F2F</color>
-    <color name="widget_ribbon_yt_t1">#BFF44336</color>
-    <color name="widget_ribbon_yt_t2">#72C61818</color>
-    <color name="widget_ribbon_yt_t3">#00B71C1C</color>
-    <color name="widget_ribbon_yt_t4">#8CF44336</color>
-    <color name="widget_ribbon_yt_t5">#8DE03131</color>
-    <color name="widget_ribbon_yt_t6">#A6F44336</color>
-    <color name="widget_ribbon_yt_t7">#33D32F2F</color>
+    <color name="widget_ribbon_yt_t0">#00FF0000</color>  <!-- fully transparent -->
+    <color name="widget_ribbon_yt_t1">#BFFF0000</color>  <!-- 75% YouTube red -->
+    <color name="widget_ribbon_yt_t2">#72CC0000</color>  <!-- 45% deep red -->
+    <color name="widget_ribbon_yt_t3">#00990000</color>  <!-- fully transparent deep -->
+    <color name="widget_ribbon_yt_t4">#8CFF0000</color>  <!-- 55% YouTube red -->
+    <color name="widget_ribbon_yt_t5">#8DEE0000</color>  <!-- 55% slightly deeper -->
+    <color name="widget_ribbon_yt_t6">#A6FF0000</color>  <!-- 65% YouTube red -->
+    <color name="widget_ribbon_yt_t7">#33FF0000</color>  <!-- 20% YouTube red -->
 
     <!-- Widget Ribbon Colors IG -->
     <color name="widget_ribbon_ig_t0">#00833ab4</color>
@@ -87,6 +96,6 @@
     <color name="spotify_banner_ribbon_3">#EE22D35E</color>  <!-- lighter green -->
     <color name="spotify_banner_ribbon_4">#CC178F42</color>  <!-- deep green -->
     <!-- Text drawn on top of the ribbons — set to app bg so it looks like cutout text -->
-    <color name="spotify_banner_text">#F5F5F5</color>
+    <color name="spotify_banner_text">#F8F5F5F5</color>
 
 </resources>

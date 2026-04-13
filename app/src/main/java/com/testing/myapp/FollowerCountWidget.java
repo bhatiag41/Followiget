@@ -55,10 +55,16 @@ public class FollowerCountWidget extends AppWidgetProvider {
         // Always show username — the card always has room
         views.setViewVisibility(R.id.username_text, View.VISIBLE);
 
-        // Bitmap canvas size matches actual widget dimensions
+        // Convert dp → px for the actual bitmap canvas
         float density = context.getResources().getDisplayMetrics().density;
+        
+        // Width can stretch, so derive it from minWidth
         int bgWidth  = Math.max((int) (minWidth  * density), 200);
-        int bgHeight = Math.max((int) (minHeight * density), 100);
+        // CRITICAL FIX: The widget_card layout is strictly 130dp high. 
+        // If we draw the canvas based on minHeight (which grows when resized), 
+        // the top and bottom get cut off when squeezed into the 130dp view.
+        // Fixing it to exactly 130 * density guarantees a perfect 1:1 fit.
+        int bgHeight = (int) (130 * density);
 
         boolean isYouTube = "youtube".equals(config.platform);
         boolean isRibbons = "lines".equals(config.themeStyle);
@@ -91,9 +97,7 @@ public class FollowerCountWidget extends AppWidgetProvider {
             int countColor = isDark
                 ? context.getResources().getColor(R.color.widget_text_primary)
                 : context.getResources().getColor(R.color.widget_text_primary_light);
-            int tagColor = isDark
-                ? context.getResources().getColor(R.color.widget_text_followers_tag)
-                : context.getResources().getColor(R.color.widget_text_followers_tag_light);
+            int tagColor = themeColor;
 
             views.setTextColor(R.id.follower_tag, tagColor);
             views.setTextColor(R.id.follower_count_1, countColor);
@@ -105,21 +109,35 @@ public class FollowerCountWidget extends AppWidgetProvider {
             boolean isSpotify = "spotify".equals(config.platform);
             Bitmap bg;
             if (isSpotify) {
-                bg = WidgetCanvasRenderer.createSpotifyMusicBackground(context, bgWidth, bgHeight);
+                bg = WidgetCanvasRenderer.createSpotifyMusicBackground(context, bgWidth, bgHeight, isDark);
             } else {
-                bg = WidgetCanvasRenderer.createRibbonWavesBackground(context, bgWidth, bgHeight, config.platform);
+                bg = WidgetCanvasRenderer.createRibbonWavesBackground(context, bgWidth, bgHeight, config.platform, isDark);
             }
             views.setImageViewBitmap(R.id.widget_background_image, bg);
             views.setViewVisibility(R.id.scrim_overlay, View.GONE);
             views.setInt(R.id.photo_container, "setBackgroundResource", R.drawable.photo_ring_minimal_spotify);
 
-            // Spotify lines uses green accent for tag; others use standard dim white
-            int tagColor = isSpotify
-                ? context.getResources().getColor(R.color.widget_minimal_sp)
-                : context.getResources().getColor(R.color.widget_text_followers_tag_ribbons);
+            // Tag colour:
+            //   Spotify dark  → Spotify green accent
+            //   Spotify light → Spotify green accent (still readable on mint bg)
+            //   Others  dark  → semi-transparent white
+            //   Others  light → semi-transparent dark
+            int tagColor;
+            if (isSpotify) {
+                tagColor = context.getResources().getColor(R.color.widget_minimal_sp);
+            } else if (isDark) {
+                tagColor = context.getResources().getColor(R.color.widget_text_followers_tag_ribbons);
+            } else {
+                tagColor = context.getResources().getColor(R.color.widget_text_followers_tag_ribbons_light);
+            }
+
+            int countColor = isDark
+                    ? context.getResources().getColor(R.color.widget_text_primary)
+                    : context.getResources().getColor(R.color.widget_text_primary_ribbons_light);
+
             views.setTextColor(R.id.follower_tag,     tagColor);
-            views.setTextColor(R.id.follower_count_1, context.getResources().getColor(R.color.widget_text_primary));
-            views.setTextColor(R.id.follower_count_2, context.getResources().getColor(R.color.widget_text_primary));
+            views.setTextColor(R.id.follower_count_1, countColor);
+            views.setTextColor(R.id.follower_count_2, countColor);
             if (!isSpotify) {
                 views.setInt(R.id.photo_container, "setBackgroundResource", R.drawable.photo_ring_gradient);
             }
@@ -237,13 +255,15 @@ public class FollowerCountWidget extends AppWidgetProvider {
                            ? context.getResources().getColor(R.color.widget_minimal_yt)
                            : context.getResources().getColor(R.color.widget_minimal_ig);
             } else if ("lines".equals(config.themeStyle)) {
-                 usernameColor = context.getResources().getColor(R.color.widget_text_username_ribbons);
+                 usernameColor = isDark
+                         ? context.getResources().getColor(R.color.widget_text_username_ribbons)
+                         : context.getResources().getColor(R.color.widget_text_username_ribbons_light);
             } else {
                  usernameColor = isDark ? context.getResources().getColor(R.color.widget_text_username)
                                         : context.getResources().getColor(R.color.widget_text_username_light);
             }
         }
-        views.setImageViewBitmap(R.id.username_image, WidgetCanvasRenderer.createTextBitmap(context, finalUsername, usernameColor, 18f));
+        views.setImageViewBitmap(R.id.username_image, WidgetCanvasRenderer.createTextBitmap(context, finalUsername, usernameColor, 32f));
         views.setViewVisibility(R.id.username_image, View.VISIBLE);
 
         String countText = result.count;

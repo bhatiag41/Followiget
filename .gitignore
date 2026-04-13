@@ -13,6 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-
-# API keys — never commit
 .env

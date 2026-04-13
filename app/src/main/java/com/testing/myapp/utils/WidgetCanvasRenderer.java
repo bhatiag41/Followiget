@@ -3,9 +3,11 @@ package com.testing.myapp.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import com.testing.myapp.R;
@@ -70,77 +72,80 @@ public class WidgetCanvasRenderer {
     }
 
     /**
-     * Spotify widget: bright Spotify green (#1DB954) background
-     * with multiple parallel wavy black lines flowing across
-     * (like the reference image — topographic/sound-wave style).
+     * Spotify widget — aurora glow shadow + concentric waveform arcs.
+     *
+     * Layer 1: Deep dark-green base (dark) / white (light)
+     * Layer 2: Radial aurora glow from bottom-left (speaker spotlight / shadow)
+     * Layer 3: 9 concentric arcs sweeping upper-right (speaker-cone waveform)
      */
-    public static Bitmap createSpotifyMusicBackground(Context context, int width, int height) {
+    public static Bitmap createSpotifyMusicBackground(Context context, int width, int height, boolean isDarkTheme) {
         Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
-        // Clip rounded corners
+        // ── Clip rounded corners ──────────────────────────────────────────────
         Path clipPath = new Path();
         clipPath.addRoundRect(new RectF(0, 0, width, height), 44f, 44f, Path.Direction.CW);
         canvas.clipPath(clipPath);
 
-        // 1. Bright Spotify green base
-        canvas.drawColor(0xFF1DB954);
+        // ── LAYER 1 : Base fill ───────────────────────────────────────────────
+        canvas.drawColor(isDarkTheme ? 0xFF0A1410 : 0xFFFFFFFF);
 
-        // 2. Parallel wavy black lines across the full card
-        int numLines = 20;
-        float lineSpacingY = height / (float) (numLines + 1);
+        // ── LAYER 2 : Radial aurora glow — bottom-left origin ─────────────────
+        Paint glowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        RadialGradient aurora = new RadialGradient(
+            width * 0.05f, height * 1.05f, width * 1.15f,
+            new int[]{
+                isDarkTheme ? 0x661DB954 : 0x331DB954,
+                isDarkTheme ? 0x221DB954 : 0x141DB954,
+                0x00000000
+            },
+            new float[]{ 0f, 0.45f, 1f },
+            Shader.TileMode.CLAMP
+        );
+        glowPaint.setShader(aurora);
+        canvas.drawRect(0, 0, width, height, glowPaint);
 
-        Paint wavePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        wavePaint.setStyle(Paint.Style.STROKE);
-        wavePaint.setStrokeCap(Paint.Cap.ROUND);
-        wavePaint.setStrokeJoin(Paint.Join.ROUND);
-        wavePaint.setColor(0xCC000000);  // semi-opaque black
-        wavePaint.setStrokeWidth(1.8f);
+        // ── LAYER 3 : 3 bold concentric arcs — fills any widget size ─────────
+        // Radii and stroke widths are derived from the widget diagonal so they
+        // always span the full card, whether the widget is tiny or 5-column wide.
+        Paint arcPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        arcPaint.setStyle(Paint.Style.STROKE);
+        arcPaint.setStrokeCap(Paint.Cap.ROUND);
 
-        // Amplitude: center lines have more swell (like the reference),
-        // outer lines flatter for a realistic sound-field look
-        float[] ampFactors = {
-            0.04f, 0.08f, 0.13f, 0.20f, 0.28f, 0.35f, 0.40f, 0.44f, 0.46f, 0.46f,
-            0.46f, 0.46f, 0.44f, 0.40f, 0.35f, 0.28f, 0.20f, 0.13f, 0.08f, 0.04f
-        };
+        // Arc origin: off-screen bottom-left corner (same quadrant as before)
+        float arcOriginX = width * -0.08f;
+        float arcOriginY = height * 1.20f;
 
-        for (int i = 0; i < numLines; i++) {
-            float baseY = lineSpacingY * (i + 1);
-            float amp   = ampFactors[i] * height * 0.55f;
-            float seg   = width / 3f;
-            float sign  = (i % 2 == 0) ? 1f : -1f;
+        // Diagonal of the widget — use this as the scale reference
+        float diag = (float) Math.sqrt((double)(width * width) + (double)(height * height));
 
-            Path wavePath = new Path();
-            wavePath.moveTo(-10, baseY);
-            wavePath.cubicTo(
-                seg * 0.30f, baseY + sign * amp,
-                seg * 0.70f, baseY - sign * amp,
-                seg,         baseY
+        // 3 arcs: inner fills left/bottom, middle covers centre, outer reaches top-right corner
+        float[] radii    = { diag * 0.32f, diag * 0.62f, diag * 0.96f };
+        int[]   alphas   = { 216,           165,           100           }; // 85% → 65% → 39%
+        float[] strokes  = { diag * 0.07f,  diag * 0.052f, diag * 0.036f };
+
+        for (int i = 0; i < 3; i++) {
+            arcPaint.setColor(Color.argb(alphas[i], 0, 0, 0));
+            arcPaint.setStrokeWidth(strokes[i]);
+
+            RectF arcRect = new RectF(
+                arcOriginX - radii[i], arcOriginY - radii[i],
+                arcOriginX + radii[i], arcOriginY + radii[i]
             );
-            wavePath.cubicTo(
-                seg * 1.30f, baseY + sign * amp,
-                seg * 1.70f, baseY - sign * amp,
-                seg * 2f,    baseY
-            );
-            wavePath.cubicTo(
-                seg * 2.30f, baseY + sign * amp,
-                seg * 2.70f, baseY - sign * amp,
-                width + 10f, baseY
-            );
-            canvas.drawPath(wavePath, wavePaint);
+            canvas.drawArc(arcRect, 222f, 108f, false, arcPaint);
         }
 
-        // 3. Subtle thin dark inner border to frame the card
+        // ── Border ────────────────────────────────────────────────────────────
         Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setStrokeWidth(3f);
-        borderPaint.setColor(0x33000000);
+        borderPaint.setStrokeWidth(2.5f);
+        borderPaint.setColor(isDarkTheme ? 0x2A1DB954 : 0x3A1DB954);
         canvas.drawRoundRect(new RectF(1.5f, 1.5f, width - 1.5f, height - 1.5f), 44f, 44f, borderPaint);
 
         return output;
     }
 
-    public static Bitmap createRibbonWavesBackground(Context context, int width, int height, String platform) {
+    public static Bitmap createRibbonWavesBackground(Context context, int width, int height, String platform, boolean isDarkTheme) {
         Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
@@ -149,8 +154,9 @@ public class WidgetCanvasRenderer {
         clipPath.addRoundRect(new RectF(0, 0, width, height), 44f, 44f, Path.Direction.CW);
         canvas.clipPath(clipPath);
 
-        // Card background
-        canvas.drawColor(context.getResources().getColor(R.color.widget_card_base));
+        // Card background — near-black (dark) or light grey (light)
+        canvas.drawColor(context.getResources().getColor(
+                isDarkTheme ? R.color.widget_card_base : R.color.widget_card_base_light));
 
         // Lock aspect ratio logic to prevent line squeezing. Let small sizes clip natural lines.
         float w = Math.max(width, height * 2f);
@@ -258,21 +264,24 @@ public class WidgetCanvasRenderer {
         android.graphics.Rect bounds = new android.graphics.Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
 
-        Paint.FontMetrics fm = paint.getFontMetrics();
-        float height = fm.descent - fm.ascent;
+        // measureText provides the exact full-length width required for cursive text to not get chopped
+        float exactWidth = paint.measureText(text);
+        // bounds.height() provides the exact ink height, stripping away massive cursive font metrics blank space
+        float inkHeight = bounds.height();
         
-        // Use bounds to trim internal font padding
-        float width = bounds.width();
-        
-        // Ensure minimum 1x1 to prevent crash
-        if (width <= 0) width = 1;
-        if (height <= 0) height = 1;
+        // Safety bounds
+        if (exactWidth <= 0) exactWidth = 1;
+        if (inkHeight <= 0) inkHeight = 1;
 
-        // Add 2px safety padding to right end for cursive loops
-        Bitmap bitmap = Bitmap.createBitmap((int) width + 2, (int) height, Bitmap.Config.ARGB_8888);
+        // Add 8px of safety padding on all sides to absolutely prevent clipping any wild cursive swashes
+        float padding = 8f;
+
+        Bitmap bitmap = Bitmap.createBitmap((int) (exactWidth + padding * 2), (int) (inkHeight + padding * 2), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        // Shift text left by bounds.left to remove left-side blank space
-        canvas.drawText(text, -bounds.left, -fm.ascent, paint);
+        
+        // Draw the text exactly offsetting any internal bounds shift so it sits tightly flush to the start
+        canvas.drawText(text, -bounds.left + padding, -bounds.top + padding, paint);
+        
         return bitmap;
     }
 
