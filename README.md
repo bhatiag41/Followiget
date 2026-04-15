@@ -1,8 +1,8 @@
-# FollowiGet v2.0 🚀
+# FolloWiget v2.0 🚀
 
-**FollowiGet** is a premium Android widget for tracking your social media presence in real-time. Now with multi-platform support, you can monitor your Instagram followers, YouTube subscribers, and Spotify monthly listeners with stunning, customizable aesthetics.
+**FolloWiget** is a premium Android widget for tracking your social media presence in real-time. Now with multi-platform support, you can monitor your Instagram followers, YouTube subscribers, and Spotify monthly listeners with stunning, customizable aesthetics.
 
-![FollowiGet Preview](https://github.com/user-attachments/assets/e0acbd8f-8a16-4eca-be28-c8d0c952cb2d)
+![FolloWiget Preview](https://github.com/user-attachments/assets/e0acbd8f-8a16-4eca-be28-c8d0c952cb2d)
 
 
 ## ✨ What's New in v2.0
@@ -21,7 +21,7 @@
 To use the Spotify tracking feature, you must provide your own API credentials:
 1.  Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
 2.  Create a new App to obtain your **Client ID** and **Client Secret**.
-3.  Enter these credentials in the **FollowiGet Settings** menu.
+3.  Enter these credentials in the **FolloWiget Settings** menu.
 
 ### 📺 YouTube Handles
 When adding a YouTube channel, please use the handle format starting with an **`@`** symbol (e.g., `@bhatiag41`).
@@ -30,7 +30,7 @@ When adding a YouTube channel, please use the handle format starting with an **`
 
 1.  Download the latest APK from the [Releases](https://github.com/bhatiag41/followiget/releases) section.
 2.  Install the APK on your Android device.
-3.  Add the **FollowiGet** widget to your home screen from the widget selection menu.
+3.  Add the **FolloWiget** widget to your home screen from the widget selection menu.
 4.  Enter your username/handle and choose your preferred style.
 
 ## ⚙️ How It Works
